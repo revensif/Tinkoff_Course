@@ -19,7 +19,8 @@ public class TasksTest {
             "01:00, 60",
             "13:56, 836",
             "00:00, 0",
-            "00100:00, 6000"
+            "00100:00, 6000",
+            "10:0003, 603"
         })
         void Task1TestCorrect(String time, Integer totalExpected) {
             int totalCalculated = Task1.minutesToSeconds(time);
@@ -34,7 +35,9 @@ public class TasksTest {
             ",-1",
             "10:60, -1",
             "'', -1",
-            "ad:12, -1"
+            "ad:1a, -1",
+            "-00600:00, -1",
+            "12:nh, -1"
         })
         void Task1TestIncorrect(String time, Integer totalExpected) {
             int totalCalculated = Task1.minutesToSeconds(time);
