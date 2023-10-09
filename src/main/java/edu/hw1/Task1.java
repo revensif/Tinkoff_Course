@@ -30,9 +30,6 @@ public final class Task1 {
         if (sec >= SECONDS) {
             flag = true;
         }
-        if ((sec < 0) || (min < 0)) {
-            flag = true;
-        }
         return (flag) ? -1 : min * SECONDS + sec;
     }
 }
