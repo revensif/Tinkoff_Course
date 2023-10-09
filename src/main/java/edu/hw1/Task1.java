@@ -9,12 +9,12 @@ public final class Task1 {
 
     public static int minutesToSeconds(String time) {
         boolean flag = false;
-        if (time == null || time.isEmpty()) {
+        if ((time == null) || (time.isEmpty())) {
             return -1;
         }
         String[] line = time.split(":");
         if (line.length != 2) {
-            flag = true;
+            return -1;
         }
         if ((line[0].length() < 2) || (line[1].length() < 2)) {
             flag = true;
