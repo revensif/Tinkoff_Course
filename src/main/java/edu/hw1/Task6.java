@@ -16,6 +16,9 @@ public final class Task6 {
         if ((num <= NUM1000) || (num >= NUM10000)) {
             return -1;
         }
+        if (isRepeated(num)) {
+            return -1;
+        }
         return recursiveCount(num, count);
     }
 
@@ -40,5 +43,15 @@ public final class Task6 {
         int asc = Integer.parseInt(ascend);
         int desc = Integer.parseInt(descend);
         return new int[] {Math.max(asc, desc), Math.min(asc, desc)};
+    }
+
+    private static boolean isRepeated(int num) {
+        char[] digits = ("" + num).toCharArray();
+        for (int i = 0; i < digits.length - 1; i++) {
+            if (digits[i] != digits[i + 1]) {
+                return false;
+            }
+        }
+        return true;
     }
 }

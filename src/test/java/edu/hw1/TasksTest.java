@@ -105,7 +105,7 @@ public class TasksTest {
     }
 
     @Nested
-    class Tast4Test {
+    class Task4Test {
         @ParameterizedTest
         @DisplayName("Task4Test: Correct Input")
         @CsvSource({
@@ -174,7 +174,9 @@ public class TasksTest {
         @CsvSource({
             "-1123, -1",
             "1000, -1",
-            "10000, -1"
+            "10000, -1",
+            "1111, -1",
+            "3333, -1"
         })
         void Task6TestIncorrect(int num, int totalExpected) {
             int totalCalculated = Task6.countK(num);
