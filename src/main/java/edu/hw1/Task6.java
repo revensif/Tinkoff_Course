@@ -3,10 +3,9 @@ package edu.hw1;
 import java.util.Arrays;
 
 public final class Task6 {
-    private final static int KAPREKAR = 6174;
-    private final static int TEN = 10;
-    private final static int NUM1000 = 1000;
-    private final static int NUM10000 = 10000;
+    private static final int KAPREKAR = 6174;
+    private static final int NUM1000 = 1000;
+    private static final int NUM10000 = 10000;
 
     private Task6() {
     }
@@ -34,7 +33,7 @@ public final class Task6 {
     private static int[] convert(int num) {
         int n = num;
         if (n < NUM1000) {
-            n *= TEN;
+            n *= Task2.TEN;
         }
         char[] charArr = ("" + n).toCharArray();
         Arrays.sort(charArr);

@@ -3,9 +3,9 @@ package edu.hw1;
 import java.util.stream.IntStream;
 
 public final class Task8 {
-    private final static int N = 8;
-    private final static int[] DX = {-1, 1, -2, 2, -2, 2, -1, 1};
-    private final static int[] DY = {-2, -2, -1, -1, 1, 1, 2, 2};
+    private static final int N = 8;
+    private static final int[] DX = {-1, 1, -2, 2, -2, 2, -1, 1};
+    private static final int[] DY = {-2, -2, -1, -1, 1, 1, 2, 2};
 
     private Task8() {
     }

@@ -1,7 +1,6 @@
 package edu.hw1;
 
 public final class Task5 {
-    private final static int TEN = 10;
 
     private Task5() {
     }
@@ -11,7 +10,7 @@ public final class Task5 {
     //Считаем, что к последней цифре прибавляется 0
     public static boolean isPalindromeDescendant(int num) {
         int n = Math.abs(num);
-        while (n >= TEN) {
+        while (n >= Task2.TEN) {
             char[] charArr = ("" + n).toCharArray();
             if (isPalindrome(charArr)) {
                 return true;
