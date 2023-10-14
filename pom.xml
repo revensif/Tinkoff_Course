@@ -74,6 +74,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-lambda</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
         <!-- Logging -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
