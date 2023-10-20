@@ -52,6 +52,9 @@ public class Session {
     }
 
     @NotNull GuessResult giveUp() {
+        if (userAnswer == null) {
+            userAnswer = "*".repeat(answer.length()).toCharArray();
+        }
         return new Defeat(userAnswer, attempts, maxAttempts);
     }
 

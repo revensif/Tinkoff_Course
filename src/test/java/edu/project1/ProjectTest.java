@@ -105,4 +105,15 @@ public class ProjectTest {
         assertEquals(" You lost!", result.message());
         assertEquals("*e**", new String(result.state()));
     }
+
+    @Test
+    @DisplayName("give up Test")
+    void giveUpTest() {
+        ConsoleHangman hangman = new ConsoleHangman();
+        Session session = new Session("Test", 3);
+        GuessResult result = hangman.tryGuess(session, "give up");
+        assertEquals(Defeat.class, result.getClass());
+        assertEquals(" You lost!", result.message());
+        assertEquals("****", new String(result.state()));
+    }
 }
