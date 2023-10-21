@@ -1,7 +1,7 @@
-package edu.hw2;
+package edu.hw2.Task4;
 
 public final class Task4 {
-    static final String MESSAGE = "Ошибка: Метод не вызывался ни одним классом";
+    public static final String MESSAGE = "Ошибка: Метод не вызывался ни одним классом";
 
     private Task4() {
     }
