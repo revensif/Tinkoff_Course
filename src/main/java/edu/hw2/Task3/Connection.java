@@ -8,12 +8,12 @@ import static edu.hw2.Task3.PopularCommandExecutor.MAX_NUM;
 public interface Connection extends AutoCloseable {
     Logger LOGGER = LogManager.getLogger();
 
-    void execute(String command, Random rand);
+    void execute(String command);
 
     class StableConnection implements Connection {
 
         @Override
-        public void execute(String command, Random rand) {
+        public void execute(String command) {
             LOGGER.info(command);
         }
 
@@ -24,9 +24,14 @@ public interface Connection extends AutoCloseable {
     }
 
     class FaultyConnection implements Connection {
+        private final Random rand;
+
+        public FaultyConnection(Random rand) {
+            this.rand = rand;
+        }
 
         @Override
-        public void execute(String command, Random rand) {
+        public void execute(String command) {
             if (rand.nextInt(0, MAX_NUM) >= 1) {
                 LOGGER.info(command);
             } else {

@@ -21,7 +21,7 @@ public class ConnectionsTest {
         Random rand = mock(Random.class);
         Mockito.when(rand.nextInt(0, 10)).thenReturn(0);
         try (Connection connection = new StableConnection()) {
-            assertDoesNotThrow(() -> connection.execute(COMMAND, rand));
+            assertDoesNotThrow(() -> connection.execute(COMMAND));
         } catch (Exception ignored) {
         }
     }
@@ -31,8 +31,8 @@ public class ConnectionsTest {
     void faultyConnectionTest() {
         Random rand = mock(Random.class);
         Mockito.when(rand.nextInt(0, 10)).thenReturn(0);
-        try (Connection connection = new FaultyConnection()) {
-            assertThrows(ConnectionException.class, () -> connection.execute(COMMAND, rand));
+        try (Connection connection = new FaultyConnection(rand)) {
+            assertThrows(ConnectionException.class, () -> connection.execute(COMMAND));
         } catch (Exception ignored) {
         }
     }

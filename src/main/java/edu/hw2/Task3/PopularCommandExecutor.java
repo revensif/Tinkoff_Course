@@ -1,7 +1,5 @@
 package edu.hw2.Task3;
 
-import java.util.Random;
-
 public final class PopularCommandExecutor {
     public static final String COMMAND = "apt update && apt upgrade -y";
     private final ConnectionManager manager;
@@ -13,18 +11,18 @@ public final class PopularCommandExecutor {
         this.manager = manager;
     }
 
-    public void updatePackages(Random rand) {
-        tryExecute(COMMAND, rand);
+    public void updatePackages() {
+        tryExecute(COMMAND);
     }
 
-    void tryExecute(String command, Random rand) {
+    void tryExecute(String command) {
         for (int i = 1; i <= maxAttempts; i++) {
             try (Connection connection = manager.getConnection()) {
-                connection.execute(command, rand);
+                connection.execute(command);
                 break;
             } catch (Exception conExp) {
                 if (i == maxAttempts) {
-                    throw new ConnectionException("Все попытки подключения закончились", conExp.getCause());
+                    throw new ConnectionException("Все попытки подключения закончились", conExp);
                 }
             }
         }
