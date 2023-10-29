@@ -4,33 +4,18 @@ import edu.project1.GuessResult.Defeat;
 import edu.project1.GuessResult.FailedGuess;
 import edu.project1.GuessResult.SuccessfulGuess;
 import edu.project1.GuessResult.Win;
-import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-public class ProjectTest {
-
-    @Test
-    @DisplayName("incorrectRunTest")
-    void incorrectRunTest() {
-        ConsoleHangman hangman = new ConsoleHangman();
-        Random rand = mock(Random.class);
-        // The word: 123 -> The word contains numbers
-        Mockito.when(rand.nextInt(0, 4)).thenReturn(2);
-        assertThrows(IllegalArgumentException.class, () -> hangman.run(rand));
-        // The word: a -> The length of the word must be at least 2 letters
-        Mockito.when(rand.nextInt(0, 4)).thenReturn(3);
-        assertThrows(IllegalArgumentException.class, () -> hangman.run(rand));
-    }
+public class ConsoleHangmanTest {
 
     @Test
     @DisplayName("tryGuess() Test: Incorrect Test")
     void incorrectTryGuessTest() {
-        String expected = " Incorrect input, try again!";
+        String expected = " Incorrect input, try again! Correct Input - a,b,...,z";
         ConsoleHangman hangman = new ConsoleHangman();
         Session session = new Session("Test", 5);
 

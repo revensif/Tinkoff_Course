@@ -16,16 +16,13 @@ public class ConsoleHangman {
     private static final String RIGHT_ARROW = ">";
     private static final String WORD = "> The word: ";
     private static final int MAX_ATTEMPTS = 5;
-    private static final String PATTERN = "^[a-zA-Z]+$";
+    private static final String RED = "\u001B[31m";
+    private static final String GREEN = "\u001B[32m";
+    static final String PATTERN = "^[a-zA-Z]+$";
 
     public void run(Random rand) throws IOException {
-        String word = new FullDictionary().randomWord(rand);
-        if (word.length() < 2) {
-            throw new IllegalArgumentException("Error: The length of the word must be at least 2 letters");
-        }
-        if (!word.matches(PATTERN)) {
-            throw new IllegalArgumentException("Error: The word contains numbers");
-        }
+        LOGGER.info("> If you want to give up, write" + RED + " 'give up' " + GREEN + "to the console.\n");
+        String word = new FullDictionary(rand).randomWord();
         Session session = new Session(word, MAX_ATTEMPTS);
         while (true) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
@@ -33,7 +30,7 @@ public class ConsoleHangman {
             LOGGER.info("< ");
             String input = rd.readLine();
             GuessResult result = tryGuess(session, input);
-            if ((result.getClass() == Win.class) || (result.getClass() == Defeat.class)) {
+            if ((result instanceof Win) || (result instanceof Defeat)) {
                 printExit(result);
                 break;
             }
@@ -50,13 +47,13 @@ public class ConsoleHangman {
                 session.getUserAnswer(),
                 session.getAttempts(),
                 session.getMaxAttempts(),
-                " Incorrect input, try again!"
+                " Incorrect input, try again! Correct Input - a,b,...,z"
             );
         }
         if (session.getAttempts() >= session.getMaxAttempts()) {
             return new Defeat(session.getUserAnswer(), session.getAttempts(), session.getMaxAttempts());
         }
-        return session.guess(input.toLowerCase().charAt(0));
+        return session.guess(input.charAt(0));
 
     }
 
