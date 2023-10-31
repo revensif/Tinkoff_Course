@@ -1,5 +1,6 @@
 package edu.hw4;
 
+import edu.hw4.Animal.Type;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import static edu.hw4.Animal.Sex;
+import static edu.hw4.Animal.Sex.F;
+import static edu.hw4.Animal.Sex.M;
 
 public final class AnimalUtils {
     private static final int HEIGHT = 100;
@@ -33,7 +37,7 @@ public final class AnimalUtils {
             .collect(Collectors.toList());
     }
 
-    public static Map<Animal.Type, Integer> countAnimalOfEachType(List<Animal> animalList) {
+    public static Map<Type, Integer> countAnimalOfEachType(List<Animal> animalList) {
         if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
             return Map.of();
         }
@@ -50,18 +54,20 @@ public final class AnimalUtils {
             .get();
     }
 
-    public static Animal.Sex whichAreMoreMOrF(List<Animal> animalList) {
+    public static Sex whichAreMoreMOrF(List<Animal> animalList) {
         if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
             return null;
         }
         return animalList.stream()
-            .collect(Collectors.groupingBy(Animal::sex, Collectors.counting()))
-            .entrySet().stream()
-            .max(Comparator.comparingLong(Map.Entry::getValue))
-            .get().getKey();
+            .mapToInt((animal) -> switch (animal.sex()) {
+                case M -> 1;
+                case F -> -1;
+                default -> 0;
+            })
+            .sum() > 0 ? M : F;
     }
 
-    public static Map<Animal.Type, Integer> heaviestAnimalOfEachType(List<Animal> animalList) {
+    public static Map<Type, Integer> heaviestAnimalOfEachType(List<Animal> animalList) {
         if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
             return Map.of();
         }
@@ -140,7 +146,7 @@ public final class AnimalUtils {
             return false;
         }
         return !animalList.stream()
-            .filter((animal) -> ((animal.type() == Animal.Type.DOG) && (animal.height() > k)))
+            .filter((animal) -> ((animal.type() == Type.DOG) && (animal.height() > k)))
             .toList()
             .isEmpty();
     }
@@ -172,9 +178,9 @@ public final class AnimalUtils {
             return false;
         }
         return animalList.stream()
-            .mapToInt((value) -> switch (value.type()) {
-                case DOG -> (value.bites()) ? 1 : 0;
-                case SPIDER -> (value.bites()) ? -1 : 0;
+            .mapToInt((animal) -> switch (animal.type()) {
+                case DOG -> (animal.bites()) ? 1 : 0;
+                case SPIDER -> (animal.bites()) ? -1 : 0;
                 default -> 0;
             })
             .sum() < 0;
@@ -189,7 +195,7 @@ public final class AnimalUtils {
             return null;
         }
         return animalList.stream()
-            .filter((animal) -> animal.type() == Animal.Type.FISH)
+            .filter((animal) -> animal.type() == Type.FISH)
             .max(Comparator.comparingInt(Animal::weight))
             .get();
     }

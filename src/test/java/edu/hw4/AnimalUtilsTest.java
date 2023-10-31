@@ -133,16 +133,16 @@ public class AnimalUtilsTest {
         Animal animal2 = new Animal("DogLongest", DOG, F, 7, 30, 20, false);
         Animal animal3 = new Animal("Cat", CAT, M, 1111, 150, 200, true);
         Animal animal4 = new Animal("Spider1", SPIDER, M, 87, 150, 150, true);
-        Animal animal5 = new Animal("Spider2", SPIDER, F, 55, 154, 155, true);
+        Animal animal5 = new Animal("Spider2", SPIDER, M, 55, 154, 155, true);
         assertThat(whichAreMoreMOrF(animalList)).isEqualTo(null);
         animalList.add(animal1);
         animalList.add(animal2);
         animalList.add(animal3);
         assertThat(whichAreMoreMOrF(animalList)).isEqualTo(F);
         animalList.add(animal4);
-        assertThat(whichAreMoreMOrF(animalList)).isEqualTo(M);
-        animalList.add(animal5);
         assertThat(whichAreMoreMOrF(animalList)).isEqualTo(F);
+        animalList.add(animal5);
+        assertThat(whichAreMoreMOrF(animalList)).isEqualTo(M);
     }
 
     @Test
