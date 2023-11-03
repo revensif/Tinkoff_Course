@@ -17,6 +17,7 @@ public final class Main {
     private Main() {
     }
 
+    @SuppressWarnings("RegexpSinglelineJava")
     public static void main(String[] args) {
         Generator generator = new EllersMazeGenerator();
         Maze maze = generator.generate(HEIGHT, WIDTH);
