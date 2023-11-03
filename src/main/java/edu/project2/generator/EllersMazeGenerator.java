@@ -1,16 +1,15 @@
 package edu.project2.generator;
 
-import edu.project2.Cell;
-import edu.project2.Maze;
-import java.util.ArrayList;
-import java.util.List;
+import edu.project2.elements.Cell;
+import edu.project2.elements.Maze;
 import java.util.Random;
 
 public class EllersMazeGenerator implements Generator {
-    private int height, width;
+    private int height;
+    private int width;
     private final Random rand = new Random();
     private static Cell[] cells;
-    int[] row_set;
+    int[] rowSet;
     int set = 1;
 
     public EllersMazeGenerator() {
@@ -23,48 +22,56 @@ public class EllersMazeGenerator implements Generator {
         this.height = height;
         this.width = width;
         cells = new Cell[width];
-        row_set = new int[width];
+        rowSet = new int[width];
+        //Шаг 1
         for (int i = 0; i < width; i++) {
             cells[i] = new Cell(i, 0);
-            row_set[i] = 0;
+            rowSet[i] = 0;
         }
+        //Шаг 2-5
         for (int i = 0; i < height; i++) {
             result[i] = step(i);
         }
-        print(height, width, result);
         return new Maze(height, width, result);
     }
 
     private Cell[] step(int i) {
         Cell[] previousRow = new Cell[width];
+        //Шаг 2:
         fillSet(cells);
+        //Шаг 3:
         mergeSet(cells);
-        /* 5.A */
         if (i != height - 1) {
+            //Шаг 4:
             fillFloor(cells);
             checkHorizontal(cells);
             cells[cells.length - 1].setRightWall(true);
-            for (int j = 0; j < width; j++) {
-                previousRow[j] =
-                    new Cell(cells[j].getX(), cells[j].getY(), cells[j].isRightWall(), cells[j].isDownWall());
-            }
+            previousRow = copy(cells);
+            //Шаг 5А:
             nextRow(cells);
             return previousRow;
         }
+        //Шаг 5Б:
         checkEnd(cells);
+        previousRow = copy(cells);
+        return previousRow;
+    }
+
+    private Cell[] copy(Cell[] cells) {
+        Cell[] copyCells = new Cell[cells.length];
         for (int j = 0; j < width; j++) {
-            previousRow[j] =
+            copyCells[j] =
                 new Cell(cells[j].getX(), cells[j].getY(), cells[j].isRightWall(), cells[j].isDownWall());
         }
-        return previousRow;
+        return copyCells;
     }
 
     /* Шаг 1: Создайте первую строку. Никакие ячейки не будут членами какого-либо набора
     Шаг 2: Присоедините любые ячейки, не входящие в набор, к их собственному уникальному набору */
     private void fillSet(Cell[] row) {
         for (int i = 0; i < row.length; i++) {
-            if (row_set[i] == 0) {
-                row_set[i] = set++;
+            if (rowSet[i] == 0) {
+                rowSet[i] = set++;
             }
         }
     }
@@ -76,21 +83,21 @@ public class EllersMazeGenerator implements Generator {
             Cell current = row[i];
             /* Если текущая ячейка и ячейка справа являются членами одного и того же набора,
             всегда создавайте стену между ними. (Это предотвращает циклы) */
-            if ((row_set[i] == row_set[i + 1]) || (rand.nextBoolean())) {
+            if ((rowSet[i] == rowSet[i + 1]) || (rand.nextBoolean())) {
                 current.setRightWall(true);
             } else {
                 /* Если вы решите не добавлять стену,
                 объедините наборы, членами которых являются текущая ячейка и ячейка справа. */
-                merge(i, row_set[i]);
+                merge(i, rowSet[i]);
             }
         }
     }
 
     private void merge(int i, int element) {
-        int mutableSet = row_set[i + 1];
+        int mutableSet = rowSet[i + 1];
         for (int j = 0; j < width; j++) {
-            if (row_set[j] == mutableSet) {
-                row_set[j] = element;
+            if (rowSet[j] == mutableSet) {
+                rowSet[j] = element;
             }
         }
     }
@@ -103,7 +110,7 @@ public class EllersMazeGenerator implements Generator {
             boolean buildBottom = rand.nextBoolean();
             int count = 0;
             for (int j = 0; j < width; j++) {
-                if (row_set[i] == row_set[j]) {
+                if (rowSet[i] == rowSet[j]) {
                     count++;
                 }
             }
@@ -113,9 +120,10 @@ public class EllersMazeGenerator implements Generator {
         }
     }
 
+    //Продолжение Шага 4
     private void checkHorizontal(Cell[] row) {
         for (int i = 0; i < row.length; i++) {
-            if (calculateHorizontalWalls(row_set[i]) == 0) {
+            if (calculateHorizontalWalls(rowSet[i]) == 0) {
                 row[i].setDownWall(false);
             }
         }
@@ -124,51 +132,43 @@ public class EllersMazeGenerator implements Generator {
     private int calculateHorizontalWalls(int element) {
         int countHorizontalWalls = 0;
         for (int i = 0; i < width; i++) {
-            if ((row_set[i] == element) && (!cells[i].isDownWall())) {
+            if ((rowSet[i] == element) && (!cells[i].isDownWall())) {
                 countHorizontalWalls++;
             }
         }
         return countHorizontalWalls;
     }
 
+    // Шаг 5А: Если вы решите добавить еще одну строку:
     private void nextRow(Cell[] previousCells) {
         for (int i = 0; i < previousCells.length; i++) {
+            previousCells[i].setY(previousCells[i].getY() + 1);
+            //Удалите все правые стены
             previousCells[i].setRightWall(false);
+            //Удалить все нижние стенки
             if (previousCells[i].isDownWall()) {
-                row_set[i] = 0;
+                //Удалите ячейки с нижней стенкой из их набора
+                rowSet[i] = 0;
                 previousCells[i].setDownWall(false);
             }
         }
     }
 
+    /* Шаг 5Б: Если вы решите пройти лабиринт
+     Перемещение слева направо: */
     private void checkEnd(Cell[] row) {
         for (int i = 0; i < row.length - 1; i++) {
-            if (row_set[i] != row_set[i + 1]) {
+            // Если текущая ячейка и ячейка справа являются членами другого набора:
+            if (rowSet[i] != rowSet[i + 1]) {
+                //Удалите правую стену
                 row[i].setRightWall(false);
-                merge(i, row_set[i]);
+                //Объедините множества, членами которых являются текущая ячейка и ячейка справа.
+                merge(i, rowSet[i]);
             }
+            //Добавьте нижнюю стенку к каждой ячейке
             row[i].setDownWall(true);
         }
         row[row.length - 1].setDownWall(true);
         row[row.length - 1].setRightWall(true);
-    }
-
-    public static void print(int w, int h, Cell[][] result) {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(" _".repeat(Math.max(0, w)));
-        builder.append('\n');
-        for (int i = 0; i < h; i++) {
-            builder.append('|');
-            for (int j = 0; j < w; j++) {
-                builder.append(result[i][j].toString());
-            }
-            builder.append('\n');
-        }
-        System.out.println(builder);
-    }
-
-    public static void main(String[] args) {
-        EllersMazeGenerator ellersMazeGenerator = new EllersMazeGenerator();
-        Maze maze = ellersMazeGenerator.generate(20, 20);
     }
 }

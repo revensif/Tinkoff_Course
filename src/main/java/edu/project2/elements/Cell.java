@@ -1,8 +1,8 @@
-package edu.project2;
+package edu.project2.elements;
 
 public class Cell {
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
     boolean rightWall;
     boolean downWall;
 
@@ -28,6 +28,10 @@ public class Cell {
         return y;
     }
 
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public boolean isRightWall() {
         return rightWall;
     }
@@ -44,12 +48,6 @@ public class Cell {
         this.downWall = downWall;
     }
 
-    @Override
-    public String toString() {
-        String down = isDownWall() ? "_" : " ";
-        String right = isRightWall() ? "|" : " ";
-        return down + right;
-    }
 }
 
 

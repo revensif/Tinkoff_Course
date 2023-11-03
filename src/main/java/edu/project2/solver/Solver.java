@@ -1,5 +1,7 @@
-package edu.project2;
+package edu.project2.solver;
 
+import edu.project2.elements.Coordinate;
+import edu.project2.elements.Maze;
 import java.util.List;
 
 public interface Solver {
