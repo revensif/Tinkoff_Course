@@ -1,23 +1,28 @@
-package edu.project2.generator;
+package edu.project2.generators;
 
 import edu.project2.elements.Cell;
 import edu.project2.elements.Maze;
 import java.util.Random;
 
 public class EllersMazeGenerator implements Generator {
+    public static final int MAX_SIZE = 100;
     private int height;
     private int width;
-    private final Random rand = new Random();
+    private final Random rand;
     private static Cell[] cells;
     int[] rowSet;
     int set = 1;
 
-    public EllersMazeGenerator() {
+    public EllersMazeGenerator(Random rand) {
+        this.rand = rand;
     }
 
     // Генерация лабиринта по методу Эллера
     @Override
     public Maze generate(int height, int width) {
+        if ((height < 1) || (width < 1) || (height > MAX_SIZE) || (width > MAX_SIZE)) {
+            throw new IllegalArgumentException("The size of the maze should be in the range [1:100]");
+        }
         Cell[][] result = new Cell[height][width];
         this.height = height;
         this.width = width;
@@ -36,7 +41,7 @@ public class EllersMazeGenerator implements Generator {
     }
 
     private Cell[] step(int i) {
-        Cell[] previousRow = new Cell[width];
+        Cell[] previousRow;
         //Шаг 2:
         fillSet(cells);
         //Шаг 3:

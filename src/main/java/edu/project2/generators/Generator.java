@@ -1,4 +1,4 @@
-package edu.project2.generator;
+package edu.project2.generators;
 
 import edu.project2.elements.Maze;
 

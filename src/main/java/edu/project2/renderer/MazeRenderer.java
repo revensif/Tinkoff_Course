@@ -3,25 +3,39 @@ package edu.project2.renderer;
 import edu.project2.elements.Cell;
 import edu.project2.elements.Coordinate;
 import edu.project2.elements.Maze;
+import java.util.Arrays;
 import java.util.List;
+import static edu.project2.generators.EllersMazeGenerator.MAX_SIZE;
 
 public class MazeRenderer implements Renderer {
+    private static final String MAZE_IS_NULL = "Maze is null";
+    private static final String WRONG_SIZE = "The size of the maze should be in the range [1:100]";
     private static final String FLOOR = "_";
     private static final String PATH = "▪";
     private static final int FOUR = 4;
 
     @Override
     public String render(Maze maze) {
-        if ((maze.getWidth() == 0) || (maze.getHeight() == 0)) {
+        if (maze == null) {
+            throw new IllegalArgumentException(MAZE_IS_NULL);
+        }
+        if ((maze.height() < 1) || (maze.width() < 1) || (maze.height() > MAX_SIZE) || (maze.width() > MAX_SIZE)) {
+            throw new IllegalArgumentException(WRONG_SIZE);
+        }
+        if (maze.grid() == null) {
             return "";
         }
-        Cell[][] cells = maze.getGrid();
-        return FLOOR.repeat(maze.getWidth() * FOUR + 1) + '\n' + getAllMazeWithoutSolution(maze, cells);
+        List<Cell> list = Arrays.stream(maze.grid()).flatMap(Arrays::stream).toList();
+        if ((list.isEmpty()) || (list.contains(null)) || (list.size() != maze.width() * maze.height())) {
+            return "";
+        }
+        Cell[][] cells = maze.grid();
+        return FLOOR.repeat(maze.width() * FOUR + 1) + '\n' + getAllMazeWithoutSolution(maze, cells);
     }
 
     private String getAllMazeWithoutSolution(Maze maze, Cell[][] cells) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < maze.getHeight(); i++) {
+        for (int i = 0; i < maze.height(); i++) {
             builder.append('|');
             builder.append(appendEntireRow(maze, cells, i));
             builder.append('\n');
@@ -31,7 +45,7 @@ public class MazeRenderer implements Renderer {
 
     private String appendEntireRow(Maze maze, Cell[][] cells, int i) {
         StringBuilder builder = new StringBuilder();
-        for (int j = 0; j < maze.getWidth(); j++) {
+        for (int j = 0; j < maze.width(); j++) {
             builder.append(getCurrentCell(cells, i, j, FLOOR, " "));
         }
         return String.valueOf(builder);
@@ -53,16 +67,26 @@ public class MazeRenderer implements Renderer {
 
     @Override
     public String render(Maze maze, List<Coordinate> path) {
-        if ((maze.getWidth() == 0) || (maze.getHeight() == 0)) {
+        if ((maze == null) || (path == null) || (path.isEmpty())) {
+            throw new IllegalArgumentException("Maze is null or Path is null or empty");
+        }
+        if ((maze.height() < 1) || (maze.width() < 1) || (maze.height() > MAX_SIZE) || (maze.width() > MAX_SIZE)) {
+            throw new IllegalArgumentException(WRONG_SIZE);
+        }
+        if (maze.grid() == null) {
             return "";
         }
-        Cell[][] cells = maze.getGrid();
-        return FLOOR.repeat(maze.getWidth() * FOUR + 1) + '\n' + getAllMazeWithSolution(maze, cells, path);
+        List<Cell> list = Arrays.stream(maze.grid()).flatMap(Arrays::stream).toList();
+        if ((list.isEmpty()) || (list.contains(null)) || (list.size() != maze.width() * maze.height())) {
+            return "";
+        }
+        Cell[][] cells = maze.grid();
+        return FLOOR.repeat(maze.width() * FOUR + 1) + '\n' + getAllMazeWithSolution(maze, cells, path);
     }
 
     private String getAllMazeWithSolution(Maze maze, Cell[][] cells, List<Coordinate> path) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < maze.getHeight(); i++) {
+        for (int i = 0; i < maze.height(); i++) {
             builder.append('|');
             builder.append(appendEntireRowWithCells(maze, cells, i, path));
             builder.append('\n');
@@ -72,7 +96,7 @@ public class MazeRenderer implements Renderer {
 
     private String appendEntireRowWithCells(Maze maze, Cell[][] cells, int i, List<Coordinate> path) {
         StringBuilder builder = new StringBuilder();
-        for (int j = 0; j < maze.getWidth(); j++) {
+        for (int j = 0; j < maze.width(); j++) {
             Coordinate coordinate = getCoordinate(path, i, j);
             if (coordinate == null) {
                 builder.append(getCurrentCell(cells, i, j, FLOOR, " "));

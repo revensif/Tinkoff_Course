@@ -1,7 +1,9 @@
 package edu.project2.elements;
 
+import java.util.Objects;
+
 public class Cell {
-    private int x;
+    private final int x;
     private int y;
     boolean rightWall;
     boolean downWall;
@@ -48,6 +50,21 @@ public class Cell {
         this.downWall = downWall;
     }
 
+    @Override public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Cell cell = (Cell) o;
+        return x == cell.x && y == cell.y && rightWall == cell.rightWall && downWall == cell.downWall;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, rightWall, downWall);
+    }
 }
 
 
