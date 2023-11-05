@@ -26,6 +26,10 @@ public class Session {
         Arrays.fill(userAnswer, '*');
     }
 
+    public String getAnswer() {
+        return answer;
+    }
+
     public char[] getUserAnswer() {
         return userAnswer;
     }
