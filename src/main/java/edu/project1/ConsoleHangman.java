@@ -73,7 +73,7 @@ public class ConsoleHangman {
         } else {
             LOGGER.info("> Missed, mistake " + MAX_ATTEMPTS + " out of " + MAX_ATTEMPTS + ".\n");
             LOGGER.info(RIGHT_ARROW + "\n");
-            LOGGER.info(RIGHT_ARROW + " The word : " + word + "\n");
+            LOGGER.info(RIGHT_ARROW + " The word: " + word + "\n");
 
         }
         LOGGER.info(RIGHT_ARROW + "\n");
