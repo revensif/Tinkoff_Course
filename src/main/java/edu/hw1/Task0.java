@@ -12,5 +12,4 @@ public final class Task0 {
     public static void helloWorld() {
         LOGGER.info("Привет, мир!");
     }
-
 }
