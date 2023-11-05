@@ -13,9 +13,7 @@ public final class Task3 {
             throw new IllegalArgumentException("The list should not be empty");
         }
         Map<T, Integer> map = new HashMap<>();
-        for (T element : list) {
-            map.put(element, map.getOrDefault(element, 0) + 1);
-        }
+        list.forEach((element) -> map.merge(element, 1, Integer::sum));
         return map;
     }
 }

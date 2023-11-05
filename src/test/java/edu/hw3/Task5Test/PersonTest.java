@@ -12,5 +12,6 @@ public class PersonTest {
     void shouldCreatePersonAndThrowException() {
         assertThrows(IllegalArgumentException.class, () -> new Person("12"));
         assertThrows(IllegalArgumentException.class, () -> new Person(")("));
+        assertThrows(IllegalArgumentException.class, () -> new Person("Thomas Aquinas Test"));
     }
 }

@@ -20,7 +20,7 @@ public final class Task2 {
         }
         int count = 0;
         List<String> list = new ArrayList<>();
-        StringBuilder cluster = new StringBuilder();
+        StringBuilder cluster = new StringBuilder(text.length());
         for (int i = 0; i < text.length(); i++) {
             switch (text.charAt(i)) {
                 case (LEFT_BRACKET) -> {
@@ -38,7 +38,7 @@ public final class Task2 {
             }
             if (count == 0) {
                 list.add(String.valueOf(cluster));
-                cluster.setLength(0);
+                cluster.delete(0, cluster.length());
             }
         }
         if (count > 0) {

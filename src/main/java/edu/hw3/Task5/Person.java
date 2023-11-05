@@ -3,7 +3,7 @@ package edu.hw3.Task5;
 import java.util.Objects;
 
 public class Person {
-    private String fullName;
+    private String firstName;
     private String lastName;
 
     public Person(String fullName) {
@@ -11,8 +11,11 @@ public class Person {
             return;
         }
         String[] name = fullName.split(" ");
+        if (name.length != 2) {
+            throw new IllegalArgumentException("Incorrect Full Name (Example: Thomas Aquinas)");
+        }
+        this.firstName = name[0];
         this.lastName = name[1];
-        this.fullName = fullName;
     }
 
     public String getLastName() {
@@ -21,36 +24,38 @@ public class Person {
 
     private boolean makeIncorrectName(String fullName) {
         if ((fullName == null) || (fullName.trim().isEmpty())) {
-            this.fullName = null;
+            this.firstName = null;
+            this.lastName = null;
             return true;
         }
         if (!fullName.matches(".*[a-zA-Z].*")) {
             throw new IllegalArgumentException("Full name should consist only of letters");
         }
-        if (fullName.split(" ").length != 2) {
+        if (fullName.split(" ").length == 1) {
+            this.firstName = "";
             this.lastName = fullName;
-            this.fullName = fullName;
             return true;
         }
         return false;
     }
 
     @Override public String toString() {
-        return fullName;
+        return firstName + " " + lastName;
     }
 
     @Override public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Person person)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        return Objects.equals(fullName, person.fullName) && Objects.equals(lastName, person.lastName);
+        Person person = (Person) o;
+        return Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fullName, lastName);
+        return Objects.hash(firstName, lastName);
     }
 }
