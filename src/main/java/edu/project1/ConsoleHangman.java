@@ -15,6 +15,7 @@ public class ConsoleHangman {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String RIGHT_ARROW = ">";
     private static final String WORD = "> Your answer: ";
+    private static final String GUESS_WORD = " The word: ";
     private static final int MAX_ATTEMPTS = 5;
     private static final String RED = "\u001B[31m";
     private static final String GREEN = "\u001B[32m";
@@ -24,6 +25,9 @@ public class ConsoleHangman {
         LOGGER.info("> If you want to give up, write" + RED + " 'give up' " + GREEN + "to the console.\n");
         String word = new FullDictionary(rand).randomWord();
         Session session = new Session(word, MAX_ATTEMPTS);
+        LOGGER.info(RIGHT_ARROW + "\n");
+        LOGGER.info(RIGHT_ARROW + GUESS_WORD + String.valueOf(session.getUserAnswer()) + "\n");
+        LOGGER.info(RIGHT_ARROW + "\n");
         try (BufferedReader rd = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
                 LOGGER.info("> Guess a letter:\n");
@@ -73,7 +77,7 @@ public class ConsoleHangman {
         } else {
             LOGGER.info("> Missed, mistake " + MAX_ATTEMPTS + " out of " + MAX_ATTEMPTS + ".\n");
             LOGGER.info(RIGHT_ARROW + "\n");
-            LOGGER.info(RIGHT_ARROW + " The word: " + word + "\n");
+            LOGGER.info(RIGHT_ARROW + GUESS_WORD + word + "\n");
 
         }
         LOGGER.info(RIGHT_ARROW + "\n");

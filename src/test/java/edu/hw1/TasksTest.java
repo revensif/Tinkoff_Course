@@ -3,23 +3,26 @@ package edu.hw1;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TasksTest {
 
-    //@Test
-    //@DisplayName("Task0Test: Correct Input")
-    //void Task0Test() throws Exception {
-    //    String text = tapSystemOut(Task0::helloWorld);
-    //    assertTrue(text.contains("Привет, мир!"));
-    //    int index1 = text.indexOf("П");
-    //    int index2 = text.indexOf("!") + 1;
-    //    assertEquals("Привет, мир!", text.substring(index1, index2));
-    //}
+    @Test
+    @DisplayName("Task0Test: Correct Input")
+    void Task0Test() throws Exception {
+        String text = tapSystemOut(Task0::helloWorld);
+        assertTrue(text.contains("Привет, мир!"));
+        int index1 = text.indexOf("П");
+        int index2 = text.indexOf("!") + 1;
+        assertEquals("Привет, мир!", text.substring(index1, index2));
+    }
 
     @Nested
     class Task1Test {
