@@ -27,8 +27,3 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-/src/main/java/edu/hw2/
-/src/test/java/edu/hw2/
