@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static edu.hw6.Task3.AbstractFilter.READABLE;
@@ -20,7 +21,7 @@ public class Task3Test {
     @Test
     @DisplayName("Task3Test : CorrectInput")
     void shouldFilterFiles() throws IOException {
-        Path path = Path.of("src\\main\\java\\edu\\hw6\\Task3\\Files");
+        Path path = Paths.get("src/main/java/edu/hw6/Task3/Files");
         DirectoryStream.Filter<Path> filter = REGULAR_FILE
             .and(READABLE)
             .and(largerThan(1))
@@ -30,7 +31,7 @@ public class Task3Test {
             .and(regexContains("[-]"));
 
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(path, filter)) {
-            assertThat(entries).contains(Path.of(path + "\\png-test.png"));
+            assertThat(entries).contains(Paths.get(path + "/png-test.png"));
         }
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(path, filter)) {
             entries.forEach(System.out::println);

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class DiskMap implements Map<String, String> {
     private final String txt = ".txt";
 
     public DiskMap(String string) {
-        path = Path.of("src\\main\\java\\edu\\hw6\\Task1\\Files\\" + string);
+        path = Paths.get("src\\main\\java\\edu\\hw6\\Task1\\Files\\" + string);
         File file = path.toFile();
         file.delete();
         file.mkdirs();
