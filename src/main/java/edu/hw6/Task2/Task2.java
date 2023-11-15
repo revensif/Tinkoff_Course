@@ -13,7 +13,7 @@ public final class Task2 {
         File file = new File(path.toUri());
         if (!file.createNewFile()) {
             String fileName = file.getName().split("\\.")[0];
-            String path2 = file.getParent() + "\\" + fileName;
+            String path2 = file.getParent() + "/" + fileName;
             File copy = new File(path2 + " — копия.txt");
             if (!copy.createNewFile()) {
                 int i = 2;
