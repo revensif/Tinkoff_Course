@@ -19,7 +19,7 @@ public final class AnimalUtils {
     }
 
     public static List<Animal> sortHeightFromSmallestToTheLargest(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return List.of();
         }
         return animalList.stream()
@@ -28,7 +28,7 @@ public final class AnimalUtils {
     }
 
     public static List<Animal> sortWeightFromHeaviestToTheLightestLimitedByFirstK(List<Animal> animalList, int k) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return List.of();
         }
         return animalList.stream()
@@ -38,7 +38,7 @@ public final class AnimalUtils {
     }
 
     public static Map<Type, Integer> countAnimalOfEachType(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return Map.of();
         }
         return animalList.stream()
@@ -46,16 +46,16 @@ public final class AnimalUtils {
     }
 
     public static Animal animalWithLongestName(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return null;
         }
         return animalList.stream()
             .max(Comparator.comparingInt((animal) -> animal.name().length()))
-            .get();
+            .orElseGet(null);
     }
 
     public static Sex whichAreMoreMOrF(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return null;
         }
         return animalList.stream()
@@ -68,7 +68,7 @@ public final class AnimalUtils {
     }
 
     public static Map<Type, Integer> heaviestAnimalOfEachType(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return Map.of();
         }
         return animalList.stream()
@@ -76,18 +76,18 @@ public final class AnimalUtils {
     }
 
     public static Animal oldestAnimalByIndexK(List<Animal> animalList, int k) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return null;
         }
         return animalList.stream()
-            .sorted(Comparator.comparingInt(Animal::age).reversed())
-            .limit(k)
-            .toList()
-            .getLast();
+            .sorted(Comparator.comparingInt(Animal::age))
+            .skip(animalList.size() - k)
+            .findFirst()
+            .orElseGet(null);
     }
 
     public static Optional<Animal> heaviestAnimalThatIsLowerThanK(List<Animal> animalList, int k) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return Optional.empty();
         }
         return animalList.stream()
@@ -97,7 +97,7 @@ public final class AnimalUtils {
     }
 
     public static Integer sumPawsOfEveryAnimal(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return 0;
         }
         return animalList.stream()
@@ -106,7 +106,7 @@ public final class AnimalUtils {
     }
 
     public static List<Animal> listOfAnimalsWhoseAgeNotEqualToPaws(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return List.of();
         }
         return animalList.stream()
@@ -115,7 +115,7 @@ public final class AnimalUtils {
     }
 
     public static List<Animal> listOfAnimalsThatCanBiteAndHigherThan100(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return List.of();
         }
         return animalList.stream()
@@ -124,7 +124,7 @@ public final class AnimalUtils {
     }
 
     public static Long countEachAnimalWhoseWeightIsMoreThanHeight(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return 0L;
         }
         return animalList.stream()
@@ -133,7 +133,7 @@ public final class AnimalUtils {
     }
 
     public static List<Animal> listOfAnimalsWhoseNameConsistOfMoreThan2Words(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return List.of();
         }
         return animalList.stream()
@@ -142,7 +142,7 @@ public final class AnimalUtils {
     }
 
     public static Boolean isContainsDogThatIsHigherThanK(List<Animal> animalList, int k) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return false;
         }
         return !animalList.stream()
@@ -152,7 +152,7 @@ public final class AnimalUtils {
     }
 
     public static Integer findWeightOfEveryAnimalThatAreFromKToIYearsLong(List<Animal> animalList, int k, int i) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return 0;
         }
         if (k > i) {
@@ -165,7 +165,7 @@ public final class AnimalUtils {
     }
 
     public static List<Animal> listOfAnimalsFilteredByTypeThanBySexThanByName(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return List.of();
         }
         return animalList.stream()
@@ -174,7 +174,7 @@ public final class AnimalUtils {
     }
 
     public static Boolean isItTrueThatSpidersBiteMoreThanDogs(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return false;
         }
         return animalList.stream()
@@ -186,7 +186,8 @@ public final class AnimalUtils {
             .sum() < 0;
     }
 
-    @SafeVarargs public static Animal findHeaviestFishInLists(List<Animal>... animalLists) {
+    @SafeVarargs
+    public static Animal findHeaviestFishInLists(List<Animal>... animalLists) {
         if (animalLists.length < 2) {
             throw new IllegalArgumentException("There should be at least 2 lists");
         }
@@ -201,24 +202,24 @@ public final class AnimalUtils {
     }
 
     public static Map<String, Set<ValidationError>> animalsWithErrors(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return Map.of();
         }
         return animalList.stream()
-            .collect(Collectors.toMap(Animal::name, ValidationError::validateAnimal))
-            .entrySet().stream()
-            .filter((entry) -> !entry.getValue().isEmpty())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            .filter((animal) -> !ValidationError.validateAnimal(animal).isEmpty())
+            .collect(Collectors.toMap(Animal::name, ValidationError::validateAnimal));
     }
 
     public static Map<String, String> animalsWithErrorsString(List<Animal> animalList) {
-        if ((animalList == null) || (animalList.isEmpty()) || (animalList.contains(null))) {
+        if (checkList(animalList)) {
             return Map.of();
         }
         return animalList.stream()
-            .collect(Collectors.toMap(Animal::name, ValidationError::validateAnimalString))
-            .entrySet().stream()
-            .filter((entry) -> !entry.getValue().isEmpty())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            .filter((animal) -> !ValidationError.validateAnimalString(animal).isEmpty())
+            .collect(Collectors.toMap(Animal::name, ValidationError::validateAnimalString));
+    }
+
+    private static boolean checkList(List<Animal> animalList) {
+        return ((animalList == null) || (animalList.isEmpty()));
     }
 }

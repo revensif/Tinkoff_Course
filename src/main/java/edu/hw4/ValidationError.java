@@ -5,59 +5,108 @@ import java.util.Set;
 
 public enum ValidationError {
 
-    NAME_ERROR,
-    TYPE_ERROR,
-    SEX_ERROR,
-    AGE_ERROR,
-    HEIGHT_ERROR,
-    WEIGHT_ERROR;
+    NAME_IS_EMPTY,
+    NAME_HAS_INCORRECT_SYMBOLS,
+    TYPE_IS_NULL,
+    SEX_IS_NULL,
+    AGE_IS_LOWER_THAN_1,
+    AGE_IS_HIGHER_THAN_AGE_BOUND,
+    HEIGHT_IS_LOWER_THAN_1,
+    WEIGHT_IS_LOWER_THAN_1;
 
     private static final int AGE_BOUND = 100;
     private static final String PATTERN = "^[a-zA-Z\\s]*$";
 
     public static Set<ValidationError> validateAnimal(Animal animal) {
         Set<ValidationError> set = new HashSet<>();
-        if ((animal.name() == null) || (animal.name().trim().isEmpty()) || (!animal.name().matches(PATTERN))) {
-            set.add(NAME_ERROR);
+        if (checkNameNullOrEmpty(animal)) {
+            set.add(NAME_IS_EMPTY);
         }
-        if (animal.type() == null) {
-            set.add(TYPE_ERROR);
+        if (checkNameIncorrectSymbols(animal)) {
+            set.add(NAME_HAS_INCORRECT_SYMBOLS);
         }
-        if (animal.sex() == null) {
-            set.add(SEX_ERROR);
+        if (checkType(animal)) {
+            set.add(TYPE_IS_NULL);
         }
-        if ((animal.age() < 1) || (animal.age() > AGE_BOUND)) {
-            set.add(AGE_ERROR);
+        if (checkSex(animal)) {
+            set.add(SEX_IS_NULL);
         }
-        if (animal.height() < 1) {
-            set.add(HEIGHT_ERROR);
+        if (checkAgeHighBound(animal)) {
+            set.add(AGE_IS_HIGHER_THAN_AGE_BOUND);
         }
-        if (animal.weight() < 1) {
-            set.add(WEIGHT_ERROR);
+        if (checkAgeIsLowerThan1(animal)) {
+            set.add(AGE_IS_LOWER_THAN_1);
+        }
+        if (checkHeight(animal)) {
+            set.add(HEIGHT_IS_LOWER_THAN_1);
+        }
+        if (checkWeight(animal)) {
+            set.add(WEIGHT_IS_LOWER_THAN_1);
         }
         return set;
     }
 
     public static String validateAnimalString(Animal animal) {
         StringBuilder stringBuilder = new StringBuilder();
-        if ((animal.name() == null) || (animal.name().trim().isEmpty()) || (!animal.name().matches(PATTERN))) {
-            stringBuilder.append(NAME_ERROR).append(" ");
+        if (checkNameNullOrEmpty(animal)) {
+            stringBuilder.append(NAME_IS_EMPTY).append(" ");
         }
-        if (animal.type() == null) {
-            stringBuilder.append(TYPE_ERROR).append(" ");
+        if (checkNameIncorrectSymbols(animal)) {
+            stringBuilder.append(NAME_HAS_INCORRECT_SYMBOLS).append(" ");
         }
-        if (animal.sex() == null) {
-            stringBuilder.append(SEX_ERROR).append(" ");
+        if (checkType(animal)) {
+            stringBuilder.append(TYPE_IS_NULL).append(" ");
         }
-        if ((animal.age() < 1) || (animal.age() > AGE_BOUND)) {
-            stringBuilder.append(AGE_ERROR).append(" ");
+        if (checkSex(animal)) {
+            stringBuilder.append(SEX_IS_NULL).append(" ");
         }
-        if (animal.height() < 1) {
-            stringBuilder.append(HEIGHT_ERROR).append(" ");
+        if (checkAgeHighBound(animal)) {
+            stringBuilder.append(AGE_IS_HIGHER_THAN_AGE_BOUND).append(" ");
         }
-        if (animal.weight() < 1) {
-            stringBuilder.append(WEIGHT_ERROR).append(" ");
+        if (checkAgeIsLowerThan1(animal)) {
+            stringBuilder.append(AGE_IS_LOWER_THAN_1).append(" ");
+        }
+        if (checkHeight(animal)) {
+            stringBuilder.append(HEIGHT_IS_LOWER_THAN_1).append(" ");
+        }
+        if (checkWeight(animal)) {
+            stringBuilder.append(WEIGHT_IS_LOWER_THAN_1).append(" ");
         }
         return String.valueOf(stringBuilder);
+    }
+
+    private static boolean checkNameNullOrEmpty(Animal animal) {
+        return ((animal.name() == null) || (animal.name().trim().isEmpty()));
+    }
+
+    private static boolean checkNameIncorrectSymbols(Animal animal) {
+        if (animal.name() == null) {
+            return false;
+        }
+        return (!animal.name().matches(PATTERN));
+    }
+
+    private static boolean checkType(Animal animal) {
+        return (animal.type() == null);
+    }
+
+    private static boolean checkSex(Animal animal) {
+        return (animal.sex() == null);
+    }
+
+    private static boolean checkAgeHighBound(Animal animal) {
+        return (animal.age() > AGE_BOUND);
+    }
+
+    private static boolean checkAgeIsLowerThan1(Animal animal) {
+        return (animal.age() < 1);
+    }
+
+    private static boolean checkHeight(Animal animal) {
+        return (animal.height() < 1);
+    }
+
+    private static boolean checkWeight(Animal animal) {
+        return (animal.weight() < 1);
     }
 }

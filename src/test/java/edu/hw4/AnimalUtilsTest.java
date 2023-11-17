@@ -35,12 +35,14 @@ import static edu.hw4.AnimalUtils.sortHeightFromSmallestToTheLargest;
 import static edu.hw4.AnimalUtils.sortWeightFromHeaviestToTheLightestLimitedByFirstK;
 import static edu.hw4.AnimalUtils.sumPawsOfEveryAnimal;
 import static edu.hw4.AnimalUtils.whichAreMoreMOrF;
-import static edu.hw4.ValidationError.AGE_ERROR;
-import static edu.hw4.ValidationError.HEIGHT_ERROR;
-import static edu.hw4.ValidationError.NAME_ERROR;
-import static edu.hw4.ValidationError.SEX_ERROR;
-import static edu.hw4.ValidationError.TYPE_ERROR;
-import static edu.hw4.ValidationError.WEIGHT_ERROR;
+import static edu.hw4.ValidationError.AGE_IS_HIGHER_THAN_AGE_BOUND;
+import static edu.hw4.ValidationError.AGE_IS_LOWER_THAN_1;
+import static edu.hw4.ValidationError.HEIGHT_IS_LOWER_THAN_1;
+import static edu.hw4.ValidationError.NAME_HAS_INCORRECT_SYMBOLS;
+import static edu.hw4.ValidationError.NAME_IS_EMPTY;
+import static edu.hw4.ValidationError.SEX_IS_NULL;
+import static edu.hw4.ValidationError.TYPE_IS_NULL;
+import static edu.hw4.ValidationError.WEIGHT_IS_LOWER_THAN_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -180,7 +182,7 @@ public class AnimalUtilsTest {
         Animal animal3 = new Animal("Cat", CAT, F, 1111, 150, 200, true);
         Animal animal4 = new Animal("Spider1", SPIDER, F, 87, 150, 150, true);
         Animal animal5 = new Animal("Spider2", SPIDER, F, 55, 154, 155, true);
-        assertThat(oldestAnimalByIndexK(animalList, 4)).isEqualTo(null);
+        assertThat(oldestAnimalByIndexK(animalList, 4)).isNull();
         animalList.add(animal1);
         animalList.add(animal2);
         animalList.add(animal3);
@@ -207,9 +209,9 @@ public class AnimalUtilsTest {
         animalList.add(animal3);
         animalList.add(animal4);
         animalList.add(animal5);
-        assertThat(heaviestAnimalThatIsLowerThanK(animalList, 153).get()).isEqualTo(animal4);
-        assertThat(heaviestAnimalThatIsLowerThanK(animalList, 150).get()).isEqualTo(animal3);
-        assertThat(heaviestAnimalThatIsLowerThanK(animalList, 60).get()).isEqualTo(animal2);
+        assertThat(heaviestAnimalThatIsLowerThanK(animalList, 153)).contains(animal4);
+        assertThat(heaviestAnimalThatIsLowerThanK(animalList, 150)).contains(animal3);
+        assertThat(heaviestAnimalThatIsLowerThanK(animalList, 60)).contains(animal2);
         assertThrows(NoSuchElementException.class, () -> heaviestAnimalThatIsLowerThanK(animalList, 20).get());
     }
 
@@ -455,6 +457,8 @@ public class AnimalUtilsTest {
         Animal animal3 = new Animal("Dog", DOG, F, 1111, 78, -200, true);
         Animal animal4 = new Animal("Spider", SPIDER, F, 87, 100, 15, true);
         Animal animal5 = new Animal("Dogster1", null, F, 55, 154, 155, true);
+        Animal animal6 = new Animal("", BIRD, F, 55, 154, 155, true);
+        Animal animal7 = new Animal("12kasa[sK", null, null, 1989, -1, -1, true);
         assertThat(animalsWithErrors(animalList))
             .containsExactlyInAnyOrderEntriesOf(Map.of());
         animalList.add(animal1);
@@ -462,11 +466,27 @@ public class AnimalUtilsTest {
         animalList.add(animal3);
         animalList.add(animal4);
         animalList.add(animal5);
+        animalList.add(animal6);
+        animalList.add(animal7);
         assertThat(animalsWithErrors(animalList))
             .containsExactlyInAnyOrderEntriesOf(Map.of(
-                "DogLongest", Set.of(SEX_ERROR, AGE_ERROR, HEIGHT_ERROR),
-                "Dog", Set.of(AGE_ERROR, WEIGHT_ERROR),
-                "Dogster1", Set.of(NAME_ERROR, TYPE_ERROR)
+                "DogLongest",
+                Set.of(SEX_IS_NULL, AGE_IS_LOWER_THAN_1, HEIGHT_IS_LOWER_THAN_1),
+                "Dog",
+                Set.of(AGE_IS_HIGHER_THAN_AGE_BOUND, WEIGHT_IS_LOWER_THAN_1),
+                "Dogster1",
+                Set.of(NAME_HAS_INCORRECT_SYMBOLS, TYPE_IS_NULL),
+                "",
+                Set.of(NAME_IS_EMPTY),
+                "12kasa[sK",
+                Set.of(
+                    NAME_HAS_INCORRECT_SYMBOLS,
+                    TYPE_IS_NULL,
+                    SEX_IS_NULL,
+                    AGE_IS_HIGHER_THAN_AGE_BOUND,
+                    HEIGHT_IS_LOWER_THAN_1,
+                    WEIGHT_IS_LOWER_THAN_1
+                )
             ));
     }
 
@@ -479,6 +499,8 @@ public class AnimalUtilsTest {
         Animal animal3 = new Animal("Dog", DOG, F, 1111, 78, -200, true);
         Animal animal4 = new Animal("Spider", SPIDER, F, 87, 100, 15, true);
         Animal animal5 = new Animal("Dogster1", null, F, 55, 154, 155, true);
+        Animal animal6 = new Animal("", BIRD, F, 55, 154, 155, true);
+        Animal animal7 = new Animal("12kasa[sK", null, null, 1989, -1, -1, true);
         assertThat(animalsWithErrorsString(animalList))
             .containsExactlyInAnyOrderEntriesOf(Map.of());
         animalList.add(animal1);
@@ -486,11 +508,21 @@ public class AnimalUtilsTest {
         animalList.add(animal3);
         animalList.add(animal4);
         animalList.add(animal5);
+        animalList.add(animal6);
+        animalList.add(animal7);
         assertThat(animalsWithErrorsString(animalList))
             .containsExactlyInAnyOrderEntriesOf(Map.of(
-                "DogLongest", "SEX_ERROR AGE_ERROR HEIGHT_ERROR ",
-                "Dog", "AGE_ERROR WEIGHT_ERROR ",
-                "Dogster1", "NAME_ERROR TYPE_ERROR "
-            ));
+                    "DogLongest",
+                    "SEX_IS_NULL AGE_IS_LOWER_THAN_1 HEIGHT_IS_LOWER_THAN_1 ",
+                    "Dog",
+                    "AGE_IS_HIGHER_THAN_AGE_BOUND WEIGHT_IS_LOWER_THAN_1 ",
+                    "Dogster1",
+                    "NAME_HAS_INCORRECT_SYMBOLS TYPE_IS_NULL ",
+                    "",
+                    "NAME_IS_EMPTY ",
+                    "12kasa[sK",
+                    "NAME_HAS_INCORRECT_SYMBOLS TYPE_IS_NULL SEX_IS_NULL AGE_IS_HIGHER_THAN_AGE_BOUND HEIGHT_IS_LOWER_THAN_1 WEIGHT_IS_LOWER_THAN_1 "
+                )
+            );
     }
 }
