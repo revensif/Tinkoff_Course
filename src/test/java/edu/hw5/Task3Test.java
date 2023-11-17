@@ -1,5 +1,6 @@
 package edu.hw5;
 
+import edu.hw5.Task3.Parser;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ public class Task3Test {
     @DisplayName("Task3Test: Correct Input")
     @MethodSource("correctDates")
     void shouldParseDate(String string, Optional<LocalDate> expected) {
-        assertThat(Task3.parseDate(string)).isEqualTo(expected);
+        assertThat(Parser.parseDate(string)).isEqualTo(expected);
     }
 
     static Arguments[] correctDates() {
@@ -37,7 +38,7 @@ public class Task3Test {
     @DisplayName("Task3Test: Incorrect Input")
     @MethodSource("incorrectDates")
     void shouldParseDateAndReturnEmptyOptional(String string, Optional<LocalDate> expected) {
-        assertThat(Task3.parseDate(string)).isEqualTo(expected);
+        assertThat(Parser.parseDate(string)).isEqualTo(expected);
     }
 
     static Arguments[] incorrectDates() {
@@ -57,6 +58,6 @@ public class Task3Test {
     @Test
     @DisplayName("Task3Test: Incorrect Input")
     void shouldParseDateAndThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> Task3.parseDate(null));
+        assertThrows(IllegalArgumentException.class, () -> Parser.parseDate(null));
     }
 }
