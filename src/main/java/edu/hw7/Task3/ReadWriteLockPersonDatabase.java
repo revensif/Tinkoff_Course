@@ -16,58 +16,67 @@ public class ReadWriteLockPersonDatabase implements PersonDatabase {
 
     @Override
     public void add(Person person) {
-        readWriteLock.readLock().lock();
-        personId.put(person.id(), person);
-        readWriteLock.readLock().unlock();
+        readWriteLock.writeLock().lock();
+        try {
+            personId.put(person.id(), person);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
     }
 
     @Override
     public void delete(int id) {
-        readWriteLock.readLock().lock();
-        Person person = personId.get(id);
-        if (person == null) {
-            return;
+        readWriteLock.writeLock().lock();
+        try {
+            Person person = personId.get(id);
+            if (person == null) {
+                return;
+            }
+            personId.remove(person.id(), person);
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
-        personId.remove(person.id(), person);
-        readWriteLock.readLock().unlock();
     }
 
     @Override
     public List<Person> findByName(String name) {
-        readWriteLock.writeLock().lock();
-        List<Person> personList =
-            personId.values()
+        readWriteLock.readLock().lock();
+        try {
+            return personId.values()
                 .stream()
                 .parallel()
                 .filter((person) -> person.name().equals(name))
                 .toList();
-        readWriteLock.writeLock().unlock();
-        return personList;
+        } finally {
+            readWriteLock.readLock().unlock();
+        }
     }
 
     @Override
     public List<Person> findByAddress(String address) {
-        readWriteLock.writeLock().lock();
-        List<Person> personList =
-            personId.values()
+        readWriteLock.readLock().lock();
+        try {
+            return personId.values()
                 .stream()
                 .parallel()
                 .filter((person) -> person.address().equals(address))
                 .toList();
-        readWriteLock.writeLock().unlock();
-        return personList;
+        } finally {
+            readWriteLock.readLock().unlock();
+        }
     }
 
     @Override
     public List<Person> findByPhone(String phone) {
-        readWriteLock.writeLock().lock();
-        List<Person> personList =
-            personId.values()
+        readWriteLock.readLock().lock();
+        try {
+            return personId.values()
                 .stream()
                 .parallel()
                 .filter((person) -> person.phoneNumber().equals(phone))
                 .toList();
-        readWriteLock.writeLock().unlock();
-        return personList;
+        } finally {
+            readWriteLock.readLock().unlock();
+        }
     }
 }
