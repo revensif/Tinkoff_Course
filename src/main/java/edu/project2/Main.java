@@ -25,11 +25,13 @@ public final class Main {
         Maze maze = generator.generate(HEIGHT, WIDTH);
         Solver solver1 = new BackTrackingSolver();
         Solver solver2 = new AlgorithmLeeSolver();
-        List<Coordinate> list1 = solver1.solve(maze, new Coordinate(0, 0), new Coordinate(HEIGHT - 1, WIDTH - 1));
+        Coordinate start = new Coordinate(0, 0);
+        Coordinate end = new Coordinate(HEIGHT - 1, WIDTH - 1);
+        List<Coordinate> list1 = solver1.solve(maze, start, end);
         Renderer renderer = new MazeRenderer();
         System.out.println(renderer.render(maze));
         System.out.println(renderer.render(maze, list1));
-        List<Coordinate> list2 = solver2.solve(maze, new Coordinate(0, 0), new Coordinate(HEIGHT - 1, WIDTH - 1));
+        List<Coordinate> list2 = solver2.solve(maze, start, end);
         System.out.println(renderer.render(maze, list2));
     }
 }

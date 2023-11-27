@@ -8,8 +8,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import static edu.project2.solvers.BackTrackingSolver.isThereErrors;
-import static edu.project2.solvers.BackTrackingSolver.isValidStep;
+import static edu.project2.solvers.Utils.isThereErrors;
+import static edu.project2.solvers.Utils.isValidStep;
 
 public class AlgorithmLeeSolver implements Solver {
     List<Coordinate> solvedPath;
@@ -39,35 +39,87 @@ public class AlgorithmLeeSolver implements Solver {
         boolean[][] visited = new boolean[cells.length][cells[0].length];
         solvedPath.add(end);
         for (int i = max - 1; i > 0; i--) {
-            //Движение влево
-            if ((isValidStep(cells, visited, endY, endX - 1))
-                && (!cells[endY][endX - 1].isRightWall()) && (filledArray[endY][endX - 1] == i)) {
+            if (moveToTheLeftFromEnd(cells, visited, endY, endX, i, filledArray)) {
                 endX -= 1;
-                solvedPath.add(new Coordinate(endY, endX));
                 continue;
             }
-            //Движение вправо
-            if ((isValidStep(cells, visited, endY, endX + 1))
-                && (!cells[endY][endX].isRightWall()) && (filledArray[endY][endX + 1] == i)) {
+            if (moveToTheRightFromEnd(cells, visited, endY, endX, i, filledArray)) {
                 endX += 1;
-                solvedPath.add(new Coordinate(endY, endX));
                 continue;
             }
-            //Движение вниз
-            if ((isValidStep(cells, visited, endY + 1, endX))
-                && (!cells[endY][endX].isDownWall()) && (filledArray[endY + 1][endX] == i)) {
+            if (moveToTheDownFromEnd(cells, visited, endY, endX, i, filledArray)) {
                 endY += 1;
-                solvedPath.add(new Coordinate(endY, endX));
                 continue;
             }
-            //Движение вверх
-            if ((isValidStep(cells, visited, endY - 1, endX))
-                && (!cells[endY - 1][endX].isDownWall()) && (filledArray[endY - 1][endX] == i)) {
+            if (moveToTheUpFromEnd(cells, visited, endY, endX, i, filledArray)) {
                 endY -= 1;
-                solvedPath.add(new Coordinate(endY, endX));
             }
         }
         solvedPath.add(start);
+    }
+
+    private boolean moveToTheLeftFromEnd(
+        Cell[][] cells,
+        boolean[][] visited,
+        int endY,
+        int endX,
+        int i,
+        int[][] filledArray
+    ) {
+        if ((isValidStep(cells, visited, endY, endX - 1))
+            && (!cells[endY][endX - 1].isRightWall()) && (filledArray[endY][endX - 1] == i)) {
+            solvedPath.add(new Coordinate(endY, endX - 1));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean moveToTheRightFromEnd(
+        Cell[][] cells,
+        boolean[][] visited,
+        int endY,
+        int endX,
+        int i,
+        int[][] filledArray
+    ) {
+        if ((isValidStep(cells, visited, endY, endX + 1))
+            && (!cells[endY][endX].isRightWall()) && (filledArray[endY][endX + 1] == i)) {
+            solvedPath.add(new Coordinate(endY, endX + 1));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean moveToTheDownFromEnd(
+        Cell[][] cells,
+        boolean[][] visited,
+        int endY,
+        int endX,
+        int i,
+        int[][] filledArray
+    ) {
+        if ((isValidStep(cells, visited, endY + 1, endX))
+            && (!cells[endY][endX].isDownWall()) && (filledArray[endY + 1][endX] == i)) {
+            solvedPath.add(new Coordinate(endY + 1, endX));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean moveToTheUpFromEnd(
+        Cell[][] cells,
+        boolean[][] visited,
+        int endY,
+        int endX,
+        int i,
+        int[][] filledArray
+    ) {
+        if ((isValidStep(cells, visited, endY - 1, endX))
+            && (!cells[endY - 1][endX].isDownWall()) && (filledArray[endY - 1][endX] == i)) {
+            solvedPath.add(new Coordinate(endY - 1, endX));
+            return true;
+        }
+        return false;
     }
 
     private int[][] fillArray(Cell[][] cells, boolean[][] visited, Coordinate start, Coordinate end) {
@@ -91,31 +143,75 @@ public class AlgorithmLeeSolver implements Solver {
 
     private List<Node> getAllNodes(Cell[][] cells, boolean[][] visited, int i, int j, int distance, int[][] result) {
         List<Node> list = new ArrayList<>();
-        //Движение влево
+        moveToTheLeft(cells, visited, i, j, distance, result, list);
+        moveToTheRight(cells, visited, i, j, distance, result, list);
+        moveToTheDown(cells, visited, i, j, distance, result, list);
+        moveToTheUp(cells, visited, i, j, distance, result, list);
+        return list;
+    }
+
+    private void moveToTheLeft(
+        Cell[][] cells,
+        boolean[][] visited,
+        int i,
+        int j,
+        int distance,
+        int[][] result,
+        List<Node> list
+    ) {
         if ((isValidStep(cells, visited, i, j - 1))
             && (!cells[i][j - 1].isRightWall())) {
             list.add(new Node(new Coordinate(i, j - 1), distance + 1));
             result[i][j - 1] = distance + 1;
         }
-        //Движение вправо
+    }
+
+    private void moveToTheRight(
+        Cell[][] cells,
+        boolean[][] visited,
+        int i,
+        int j,
+        int distance,
+        int[][] result,
+        List<Node> list
+    ) {
         if ((isValidStep(cells, visited, i, j + 1))
             && (!cells[i][j].isRightWall())) {
             list.add(new Node(new Coordinate(i, j + 1), distance + 1));
             result[i][j + 1] = distance + 1;
         }
-        //Движение вниз
+    }
+
+    private void moveToTheDown(
+        Cell[][] cells,
+        boolean[][] visited,
+        int i,
+        int j,
+        int distance,
+        int[][] result,
+        List<Node> list
+    ) {
         if ((isValidStep(cells, visited, i + 1, j))
             && (!cells[i][j].isDownWall())) {
             list.add(new Node(new Coordinate(i + 1, j), distance + 1));
             result[i + 1][j] = distance + 1;
         }
-        //Движение вверх
+    }
+
+    private void moveToTheUp(
+        Cell[][] cells,
+        boolean[][] visited,
+        int i,
+        int j,
+        int distance,
+        int[][] result,
+        List<Node> list
+    ) {
         if ((isValidStep(cells, visited, i - 1, j))
             && (!cells[i - 1][j].isDownWall())) {
             list.add(new Node(new Coordinate(i - 1, j), distance + 1));
             result[i - 1][j] = distance + 1;
         }
-        return list;
     }
 
 }

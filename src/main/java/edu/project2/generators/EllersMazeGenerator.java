@@ -9,9 +9,9 @@ public class EllersMazeGenerator implements Generator {
     private int height;
     private int width;
     private final Random rand;
-    private static Cell[] cells;
-    int[] rowSet;
-    int set = 1;
+    private Cell[] cells;
+    private int[] rowSet;
+    private int set = 1;
 
     public EllersMazeGenerator(Random rand) {
         this.rand = rand;
@@ -28,12 +28,10 @@ public class EllersMazeGenerator implements Generator {
         this.width = width;
         cells = new Cell[width];
         rowSet = new int[width];
-        //Шаг 1
         for (int i = 0; i < width; i++) {
             cells[i] = new Cell(i, 0);
             rowSet[i] = 0;
         }
-        //Шаг 2-5
         for (int i = 0; i < height; i++) {
             result[i] = step(i);
         }
@@ -42,21 +40,16 @@ public class EllersMazeGenerator implements Generator {
 
     private Cell[] step(int i) {
         Cell[] previousRow;
-        //Шаг 2:
         fillSet(cells);
-        //Шаг 3:
         mergeSet(cells);
         if (i != height - 1) {
-            //Шаг 4:
             fillFloor(cells);
             checkHorizontal(cells);
             cells[cells.length - 1].setRightWall(true);
             previousRow = copy(cells);
-            //Шаг 5А:
             nextRow(cells);
             return previousRow;
         }
-        //Шаг 5Б:
         checkEnd(cells);
         previousRow = copy(cells);
         return previousRow;
