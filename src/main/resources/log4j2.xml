@@ -7,7 +7,7 @@
     strict="true"
 >
     <Appenders>
-        <Console name="STDOUT_PLAIN" target="SYSTEM_OUT">
+        <Console name="STDOUT_PLAIN" target="SYSTEM_OUT" follow="true">
             <PatternLayout
                 disableAnsi="false"
                 pattern="%d{HH:mm:ss.SSS} %highlight{%-5p} [%-15.15thread] %-15.15logger{20} -- %highlight{%m}%n"
