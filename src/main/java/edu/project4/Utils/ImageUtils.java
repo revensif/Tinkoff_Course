@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import javax.imageio.ImageIO;
 
 public final class ImageUtils {
+    public static final int WIDTH = 1920;
+    public static final int HEIGHT = 1080;
 
     private ImageUtils() {
     }

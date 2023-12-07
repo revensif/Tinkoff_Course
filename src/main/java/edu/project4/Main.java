@@ -2,36 +2,39 @@ package edu.project4;
 
 import edu.project4.Correction.GammaCorrection;
 import edu.project4.Correction.ImageProcessor;
+import edu.project4.Renderers.MultipleThreadRenderer;
 import edu.project4.Renderers.Renderer;
-import edu.project4.Renderers.SingleThreadRenderer;
-import edu.project4.Transformations.DiskTransformation;
-import edu.project4.Transformations.HeartTransformation;
-import edu.project4.Transformations.PolarTransformation;
-import edu.project4.Transformations.SinusoidalTransformation;
 import edu.project4.Transformations.SphericalTransformation;
 import edu.project4.Transformations.Transformation;
 import edu.project4.Utils.FractalImage;
 import edu.project4.Utils.ImageFormat;
 import edu.project4.Utils.ImageUtils;
+import edu.project4.Utils.TimeCalculation;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import static edu.project4.Utils.ImageUtils.HEIGHT;
+import static edu.project4.Utils.ImageUtils.WIDTH;
 
 public final class Main {
-    private static final Path path = Paths.get("src/main/java/edu/project4/Flames");
+    private static final Path PATH = Paths.get("src/main/java/edu/project4/Flames");
+    private static final int SAMPLES = 20;
+    private static final int ITER_PER_SAMPLES = 1_000_000;
+    private static final int SYMMETRY = 3;
+    private static final double GAMMA = 2.2;
 
     private Main() {
     }
 
+    @SuppressWarnings("MagicNumber")
     public static void main(String[] args) {
-        FractalImage image = FractalImage.create(1920, 1080);
-        Renderer renderer = new SingleThreadRenderer();
-        List<Transformation> list = new ArrayList<>();
-        list.add(new PolarTransformation());
-        image = renderer.render(image, list, 20, 1000000, 10);
-        ImageProcessor imageProcessor = new GammaCorrection(2.2);
+        FractalImage image = FractalImage.create(WIDTH, HEIGHT);
+        Renderer renderer = new MultipleThreadRenderer(4);
+        List<Transformation> list = List.of(new SphericalTransformation());
+        image = renderer.render(image, list, SAMPLES, ITER_PER_SAMPLES, SYMMETRY);
+        ImageProcessor imageProcessor = new GammaCorrection(GAMMA);
         imageProcessor.process(image);
-        ImageUtils.save(image, Paths.get(path + "/test.png"), ImageFormat.PNG);
+        ImageUtils.save(image, Paths.get(PATH + "/test.png"), ImageFormat.PNG);
+        TimeCalculation.calculate();
     }
 }

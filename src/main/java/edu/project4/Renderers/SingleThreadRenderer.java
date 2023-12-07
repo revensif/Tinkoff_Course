@@ -21,6 +21,7 @@ import static edu.project4.Utils.RendererUtils.isPointInRightArea;
 import static edu.project4.Utils.RendererUtils.transformPointWithAffineCoefficient;
 
 public class SingleThreadRenderer implements Renderer {
+    private final AffineCoefficients[] affineCoefficients = generateAffineCoefficients();
 
     @Override
     public FractalImage render(
@@ -29,7 +30,6 @@ public class SingleThreadRenderer implements Renderer {
         int xRes = canvas.width();
         int yRes = canvas.height();
         Pixel[][] pixels = createPixels(xRes, yRes);
-        AffineCoefficients[] affineCoefficients = generateAffineCoefficients();
         for (int num = 0; num < samples; num++) {
             Point point = getRandomPoint();
             for (int step = -FIRST_ITERATION; step < iterPerSample; step++) {
