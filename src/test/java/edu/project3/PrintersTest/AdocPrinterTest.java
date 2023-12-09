@@ -27,7 +27,7 @@ public class AdocPrinterTest {
         if (Files.exists(filePath)) {
             Files.delete(filePath);
         }
-        AdocPrinter.createAdoc(logPath, log, date, date, "test2");
+        AdocPrinter.printAdoc(logPath, log, date, date, "test2");
         assertThat(Files.exists(filePath)).isTrue();
         assertThat(Files.isRegularFile(filePath)).isTrue();
     }
@@ -43,7 +43,7 @@ public class AdocPrinterTest {
         if (Files.exists(filePath)) {
             Files.delete(filePath);
         }
-        AdocPrinter.createAdoc(logPath, log, date, date, "test2");
+        AdocPrinter.printAdoc(logPath, log, date, date, "test2");
         assertThat(Files.exists(filePath)).isFalse();
     }
 }

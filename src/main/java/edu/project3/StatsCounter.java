@@ -12,10 +12,6 @@ public final class StatsCounter {
     private StatsCounter() {
     }
 
-    public static int countRequests(List<Log> logList) {
-        return logList.size();
-    }
-
     public static long countAverageBodyByteSent(List<Log> logList) {
         long averageBodyByteSent = 0;
         for (Log log : logList) {

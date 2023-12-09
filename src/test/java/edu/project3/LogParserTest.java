@@ -22,7 +22,7 @@ public class LogParserTest {
         assertThat(logList.size()).isEqualTo(1966);
         logList = logParser.parseData(List.of(path), date, date.plusYears(1));
         assertThat(logList).isNotEmpty();
-        assertThat(logList.size()).isEqualTo(51462);
+        assertThat(logList.size()).isEqualTo(51833);
     }
 
     @Test

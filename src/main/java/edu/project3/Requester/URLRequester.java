@@ -11,18 +11,18 @@ import static java.net.http.HttpClient.newHttpClient;
 
 public class URLRequester implements LogRequester {
     private static final int SECONDS = 10;
+    private static final Path PATH = Paths.get("src/main/java/edu/project3/Files/nginx_logs.txt");
 
     @Override
     public List<Path> requestFiles(String path) {
         try (var response = newHttpClient()) {
-            Path filePath = Paths.get("src/main/java/edu/project3/Files/nginx_logs.txt");
             var httpRequest = HttpRequest.newBuilder()
                 .uri(new URI(path))
                 .GET()
                 .timeout(Duration.ofSeconds(SECONDS))
                 .build();
-            var getResponse = response.send(httpRequest, HttpResponse.BodyHandlers.ofFile(filePath));
-            return List.of(filePath);
+            response.send(httpRequest, HttpResponse.BodyHandlers.ofFile(PATH));
+            return List.of(PATH);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

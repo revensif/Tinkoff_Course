@@ -27,7 +27,7 @@ public class MarkdownPrinterTest {
         if (Files.exists(filePath)) {
             Files.delete(filePath);
         }
-        MarkdownPrinter.createMarkdown(logPath, log, date, date, "test2");
+        MarkdownPrinter.printMarkdown(logPath, log, date, date, "test2");
         assertThat(Files.exists(filePath)).isTrue();
         assertThat(Files.isRegularFile(filePath)).isTrue();
     }
@@ -43,7 +43,7 @@ public class MarkdownPrinterTest {
         if (Files.exists(filePath)) {
             Files.delete(filePath);
         }
-        MarkdownPrinter.createMarkdown(logPath, log, date, date, "test2");
+        MarkdownPrinter.printMarkdown(logPath, log, date, date, "test2");
         assertThat(Files.exists(filePath)).isFalse();
     }
 }

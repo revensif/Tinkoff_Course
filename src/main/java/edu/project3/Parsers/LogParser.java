@@ -21,9 +21,9 @@ import org.apache.logging.log4j.Logger;
 
 public class LogParser {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int HOURS = 23;
-    private static final int MINUTES = 59;
-    private static final int SECONDS = 59;
+    private static final int LAST_HOUR_OF_THE_DAY = 23;
+    private static final int LAST_MINUTE_OF_THE_HOUR = 59;
+    private static final int LAST_SECOND_OF_THE_MINUTE = 59;
     private static final int REQUEST_SIZE = 3;
     private static final int TIME_LOCAL = 3;
     private static final int REQUEST = 4;
@@ -54,14 +54,20 @@ public class LogParser {
         if ((from == null) && (to == null)) {
             return true;
         } else if (from == null) {
-            LocalDateTime localTo = LocalDateTime.of(to, LocalTime.of(HOURS, MINUTES, SECONDS));
+            LocalDateTime localTo = LocalDateTime.of(
+                to,
+                LocalTime.of(LAST_HOUR_OF_THE_DAY, LAST_MINUTE_OF_THE_HOUR, LAST_SECOND_OF_THE_MINUTE)
+            );
             return (dateTime.isBefore(localTo.atOffset(ZoneOffset.UTC)));
         } else if (to == null) {
             LocalDateTime localFrom = LocalDateTime.of(from, LocalTime.of(0, 0, 0));
             return (dateTime.isAfter(localFrom.atOffset(ZoneOffset.UTC)));
         }
         LocalDateTime localFrom = LocalDateTime.of(from, LocalTime.of(0, 0, 0));
-        LocalDateTime localTo = LocalDateTime.of(to, LocalTime.of(HOURS, MINUTES, SECONDS));
+        LocalDateTime localTo = LocalDateTime.of(
+            to,
+            LocalTime.of(LAST_HOUR_OF_THE_DAY, LAST_MINUTE_OF_THE_HOUR, LAST_SECOND_OF_THE_MINUTE)
+        );
         return ((dateTime.isAfter(localFrom.atOffset(ZoneOffset.UTC)))
             && (dateTime.isBefore(localTo.atOffset(ZoneOffset.UTC))));
     }
@@ -77,7 +83,9 @@ public class LogParser {
 
     private static Log getLog(String line) {
         Matcher matcher = PATTERN_FOR_LOG.matcher(line);
-        matcher.find();
+        if (!matcher.find()) {
+            return null;
+        }
         OffsetDateTime offsetDateTime = getLocalTime(matcher.group(TIME_LOCAL));
         String resource = getResource(matcher.group(REQUEST));
         String status = matcher.group(STATUS);
