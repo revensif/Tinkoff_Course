@@ -58,7 +58,7 @@ public class MultipleThreadRenderer implements Renderer {
     ) {
         for (int num = 0; num < samples; num++) {
             Point point = getRandomPoint();
-            for (int step = -FIRST_ITERATION; step < iterPerSample; step++) {
+            for (int step = -FIRST_ITERATION; step <= iterPerSample; step++) {
                 AffineCoefficients coefficient = getRandomAffineCoefficient(affineCoefficients);
                 point = transformPointWithAffineCoefficient(coefficient, point);
                 Transformation transformation = getRandomTransformation(variations);
