@@ -31,7 +31,7 @@ public final class Task4 {
         ) {
             printWriter.write("Programming is learned by writing programs. ― Brian Kernighan");
         } catch (IOException ioException) {
-            LOGGER.info("An error has occured: " + ioException);
+            LOGGER.info("An error has occurred: {} ", ioException);
         }
     }
 }
