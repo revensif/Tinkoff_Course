@@ -5,13 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.jar.asm.Opcodes;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Task3Test {
 
     @Test
-    public void fib_shouldCalcFibonacci()
+    @DisplayName("FibonacciMethod Test")
+    public void shouldCalculateFib()
         throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Class<?> dynamicClass = new ByteBuddy().subclass(Object.class)
             .name("Fibonacci")
