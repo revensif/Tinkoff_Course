@@ -7,43 +7,25 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import static edu.hw8.Task1.Utils.LOCALHOST;
-import static edu.hw8.Task1.Utils.PORT;
+import static edu.hw8.Task1.Constants.PORT;
 
 public class Client {
     private static final Logger LOGGER = LogManager.getLogger();
     private Socket clientSocket;
 
-    public Client() {
-        start();
-    }
-
-    private void start() {
-        try {
-            clientSocket = new Socket(LOCALHOST, PORT);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void start() throws IOException {
+        clientSocket = new Socket("localhost", PORT);
+        LOGGER.info("Created a new client");
     }
 
     public String sendMessageToServerAndGetAnswer(String message) {
-        if (clientSocket.isClosed()) {
-            start();
-        }
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)) {
             writer.println(message);
             String messageFromServer = reader.readLine();
             LOGGER.info("Сервер: {}", messageFromServer);
-            return messageFromServer;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void closeClient() {
-        try {
             clientSocket.close();
+            return messageFromServer;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

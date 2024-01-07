@@ -3,8 +3,10 @@ package edu.hw8.Task1;
 import java.util.Map;
 import static java.util.Map.entry;
 
-public final class Utils {
+public final class Constants {
     static final String ERROR_MESSAGE = "An error has occurred: {}";
+
+    static final long TIMEOUT = 5L;
     static final int THREADS = 4;
     static final int PORT = 18080;
     static final String LOCALHOST = "localhost";
@@ -21,6 +23,6 @@ public final class Utils {
         entry("интеллект", "Чем ниже интеллект, тем громче оскорбления")
     );
 
-    private Utils() {
+    private Constants() {
     }
 }

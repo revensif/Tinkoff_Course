@@ -34,4 +34,10 @@ public class Task2Test {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    @DisplayName("creation Test")
+    void shouldCreateFixedThreadPoolAndReturnNull() {
+        assertThat(FixedThreadPool.create(0)).isNull();
+    }
 }

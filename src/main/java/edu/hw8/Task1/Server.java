@@ -8,32 +8,41 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import static edu.hw8.Task1.Utils.ERROR_MESSAGE;
-import static edu.hw8.Task1.Utils.MAP;
-import static edu.hw8.Task1.Utils.PORT;
-import static edu.hw8.Task1.Utils.THREADS;
+import static edu.hw8.Task1.Constants.ERROR_MESSAGE;
+import static edu.hw8.Task1.Constants.MAP;
+import static edu.hw8.Task1.Constants.PORT;
+import static edu.hw8.Task1.Constants.THREADS;
+import static edu.hw8.Task1.Constants.TIMEOUT;
 
 public class Server {
     private final ExecutorService executor = Executors.newFixedThreadPool(THREADS);
-    private boolean serverStatus = true;
+    private int responseNumber = 1;
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public Server() {
+    public Server(int responseNumber) {
+        if (responseNumber < 1) {
+            LOGGER.error("Wrong number of responses - {}", responseNumber);
+            throw new IllegalArgumentException("Number of response should be positive");
+        }
+        this.responseNumber = responseNumber;
     }
 
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            while (serverStatus) {
+            while (responseNumber > 0) {
                 Socket client = serverSocket.accept();
+                responseNumber--;
                 executor.submit(() -> handleClient(client));
             }
-        } catch (IOException e) {
+            executor.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
+        } catch (Exception e) {
             LOGGER.error(ERROR_MESSAGE, e.getMessage());
             throw new RuntimeException(e);
         }
-        closeServer();
+        executor.close();
     }
 
     private void handleClient(Socket client) {
@@ -48,9 +57,5 @@ public class Server {
             LOGGER.error(ERROR_MESSAGE, e.getMessage());
             throw new RuntimeException(e);
         }
-    }
-
-    public void closeServer() {
-        serverStatus = false;
     }
 }
