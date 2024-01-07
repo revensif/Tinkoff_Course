@@ -3,6 +3,7 @@ package edu.hw8;
 import edu.hw8.Task1.Client;
 import edu.hw8.Task1.Server;
 import java.io.IOException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +11,7 @@ public class Task1Test {
     private static final int SLEEP_NUMBER = 400;
 
     @Test
+    @DisplayName("ResponseTest : One Client")
     void shouldGetResponseFromServerFor1Client() throws IOException, InterruptedException {
         String expected = "Если твои противники перешли на личные оскорбления, будь уверена — твоя победа не за горами";
         Thread serverThread = new Thread(() -> {
@@ -26,6 +28,7 @@ public class Task1Test {
     }
 
     @Test
+    @DisplayName("ResponseTest : Three Clients")
     void shouldGetResponsesFromServerFor3Client() throws InterruptedException {
         String[] expected = new String[] {"Чем ниже интеллект, тем громче оскорбления",
             "Если твои противники перешли на личные оскорбления, будь уверена — твоя победа не за горами",
